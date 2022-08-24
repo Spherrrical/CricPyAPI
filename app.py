@@ -5,8 +5,11 @@ from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
 app = Flask(__name__)
-
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
 
@@ -38,7 +41,7 @@ def get_runs_search(id):
     runs = Runs.query.get_or_404(id)
     return {"runs": runs.runs}
 
-@app.route('/cricket/runs/', methods=['POST']) 
+@app.route('/cricket/runs/', methods=['POST'])
 def add_runs():
     runs = Runs(runs=request.json['runs'])
     db.session.add(runs)
@@ -52,8 +55,8 @@ def delete_runs(id):
         return {"error": "not found"}
     db.session.delete(runs)
     db.session.commit()
-    return {"message": "runs was deleted"}      
-   
+    return {"message": "runs was deleted"}
+
 
 
 
@@ -97,7 +100,7 @@ def get_drink(id):
     drink = Drink.query.get_or_404(id)
     return {"name": drink.name, "description": drink.description}
 
-@app.route('/misc/drinks/', methods=['POST']) 
+@app.route('/misc/drinks/', methods=['POST'])
 def add_drink():
     drink = Drink(name=request.json['name'], description=request.json['description'])
     db.session.add(drink)
@@ -111,4 +114,4 @@ def delete_drink(id):
         return {"error": "not found"}
     db.session.delete(drink)
     db.session.commit()
-    return {"message": "drink was deleted"}    
+    return {"message": "drink was deleted"}
