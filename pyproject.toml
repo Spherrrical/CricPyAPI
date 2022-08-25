@@ -1,0 +1,39 @@
+[tool.poetry]
+name = "repl_nix_CricPyAPI-1"
+version = "0.1.0"
+description = ""
+authors = ["Replit user <<>>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+railroad = "^0.5.0"
+Sphinx = "^5.1.1"
+numpy = "^1.23.2"
+asgiref = "^3.5.2"
+blinker = "^1.5"
+toml = "^0.10.2"
+cx-Oracle = "^8.3.0"
+karellen-sqlite = "^0.0.3"
+watchdog = "^2.1.9"
+pytest = "^7.1.2"
+pyannotate = "^1.2.0"
+cryptography = "^37.0.4"
+ipywidgets = "^8.0.1"
+m3-cdecimal = "^2.3"
+tornado = "^6.2"
+mergexp = "^0.2.22"
+python-dotenv = "^0.20.0"
+lockfile = "^0.12.2"
+Cython = "^0.29.32"
+ipython = "^8.4.0"
+keyring = "^23.8.2"
+pgdb = "^0.0.11"
+docutils = "^0.19"
+HTMLParser = "^0.0.2"
+python-ntlm = "^1.1.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
