@@ -4,20 +4,17 @@ from webbrowser import get
 from flask import Flask, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
+
 app = Flask(__name__)
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 db = SQLAlchemy(app)
-
 
 # Running this API:
 # flask run --port 4000
 
+# Runs
 
-# Runs / DB start
 
 class Runs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -27,7 +24,6 @@ class Runs(db.Model):
         return f"{self.runs}"
 
 
-# Get runs overall
 @app.route('/cricket/runs/', methods=['GET'])
 def get_runs():
     runs = Runs.query.all()
@@ -38,22 +34,21 @@ def get_runs():
         output.append(run_data)
     return {"runs": output}
 
-# Gets runs via ID
+
 @app.route('/cricket/runs/<id>', methods=['GET'])
 def get_runs_search(id):
     runs = Runs.query.get_or_404(id)
     return {"runs": runs.runs}
 
 
-# Posts runs into record
-@app.route('/cricket/runs/', methods=['POST'])
+@app.route('/cricket/runs/', methods=['POST', 'PUT'])
 def add_runs():
     runs = Runs(runs=request.json['runs'])
     db.session.add(runs)
     db.session.commit()
     return {'runs_added': runs.runs}
 
-# Deletes runs via ID
+
 @app.route('/cricket/runs/<id>', methods=['DELETE'])
 def delete_runs(id):
     runs = Runs.query.get(id)
@@ -64,12 +59,8 @@ def delete_runs(id):
     return {"message": "runs was deleted"}
 
 
-# & f:/CricPyAPI/.venv/Scripts/Activate.ps1
-
-
-
-
 # Misc
+
 
 class Drink(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -79,17 +70,22 @@ class Drink(db.Model):
     def __repr__(self):
         return f"{self.name} - {self.description}"
 
+
 @app.route('/')
 def index():
-    return {"message": 'Welcome to the Spherical API. Please return help for help.'}
+    return {
+        "message": 'Welcome to the Spherical API. Please return help for help.'
+    }
+
 
 @app.route('/help')
 def help():
     return {
-        "run_endpoints": "/runs/ GET - Request set of Runs from the CricCounter App.     /runs/<id> GET - Request set of runs via ID    /runs/ POST - Post new record of runs    /runs/<id> DELETE - Delete run records via ID. ",
+        "run_endpoints":
+        "/runs/ GET - Request set of Runs from the CricCounter App.     /runs/<id> GET - Request set of runs via ID    /runs/ POST - Post new record of runs    /runs/<id> DELETE - Delete run records via ID. ",
         "drinks_endpoints": "Coming Soon.",
         "message": 'Welcome to the Spherical API. Below are current endpoints',
-        }
+    }
 
 
 @app.route('/misc/drinks/', methods=['GET'])
@@ -102,17 +98,21 @@ def get_drinks():
         output.append(drink_data)
     return {"drinks": output}
 
+
 @app.route('/misc/drinks/<id>', methods=['GET'])
 def get_drink(id):
     drink = Drink.query.get_or_404(id)
     return {"name": drink.name, "description": drink.description}
 
+
 @app.route('/misc/drinks/', methods=['POST'])
 def add_drink():
-    drink = Drink(name=request.json['name'], description=request.json['description'])
+    drink = Drink(name=request.json['name'],
+                  description=request.json['description'])
     db.session.add(drink)
     db.session.commit()
     return {'id': drink.id}
+
 
 @app.route('/misc/drinks/<id>', methods=['DELETE'])
 def delete_drink(id):
@@ -122,3 +122,6 @@ def delete_drink(id):
     db.session.delete(drink)
     db.session.commit()
     return {"message": "drink was deleted"}
+
+
+app.run(host="0.0.0.0", port=5815)
