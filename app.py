@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 # flask run --port 4000
 
 
-# Runs
+# Runs / DB start
 
 class Runs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,6 +26,8 @@ class Runs(db.Model):
     def __repr__(self):
         return f"{self.runs}"
 
+
+# Get runs overall
 @app.route('/cricket/runs/', methods=['GET'])
 def get_runs():
     runs = Runs.query.all()
@@ -36,11 +38,14 @@ def get_runs():
         output.append(run_data)
     return {"runs": output}
 
+# Gets runs via ID
 @app.route('/cricket/runs/<id>', methods=['GET'])
 def get_runs_search(id):
     runs = Runs.query.get_or_404(id)
     return {"runs": runs.runs}
 
+
+# Posts runs into record
 @app.route('/cricket/runs/', methods=['POST'])
 def add_runs():
     runs = Runs(runs=request.json['runs'])
@@ -48,6 +53,7 @@ def add_runs():
     db.session.commit()
     return {'runs_added': runs.runs}
 
+# Deletes runs via ID
 @app.route('/cricket/runs/<id>', methods=['DELETE'])
 def delete_runs(id):
     runs = Runs.query.get(id)
@@ -58,6 +64,7 @@ def delete_runs(id):
     return {"message": "runs was deleted"}
 
 
+# & f:/CricPyAPI/.venv/Scripts/Activate.ps1
 
 
 
